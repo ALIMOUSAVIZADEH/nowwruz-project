@@ -45,6 +45,8 @@ public class Database {
         throw new EntityNotFoundException(e.id);
     }
 
-    private static void add() {
+    void add() {
+
     }
+}
 }
