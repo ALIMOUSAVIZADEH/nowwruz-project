@@ -1,16 +1,23 @@
 package example;
 
 import db.Database;
-import db.exception.EntityNotFoundException;
+import db.exception.InvalidEntityException;
 
 public class Main {
     public static void main(String[] args) {
-        Human ali = new Human("Ali");
-        Database.add(ali);
+        try {
+            Database.registerValidator(Human.HUMAN_ENTITY_CODE, new HumanValidator());
 
-        ali.name = "Ali Hosseini";
+            Human validHuman = new Human("Ali", 25);
+            Database.add(validHuman);
+            System.out.println("✅ Human added successfully!");
 
-        Human fromDB = (Human) Database.get(ali.id);
-        System.out.println("اسم در دیتابیس: " + fromDB.name);
+            Human invalidAge = new Human("Reza", -5);
+            Database.add(invalidAge);
+        } catch (InvalidEntityException e) {
+            System.out.println("❌ Validation Error: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("❌ Configuration Error: " + e.getMessage());
+        }
     }
 }
