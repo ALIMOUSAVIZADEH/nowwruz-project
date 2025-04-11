@@ -1,23 +1,33 @@
 package example;
 
-import db.Database;
-import db.exception.InvalidEntityException;
-
 public class Main {
     public static void main(String[] args) {
+        Document doc = new Document("Eid Eid Eid");
+
+        Database.add(doc);
+
+        System.out.println("Document added");
+        System.out.println("id: " + doc.id);
+        System.out.println("content: " + doc.content);
+        System.out.println("creation date: " + doc.getCreationDate());
+        System.out.println("last modification date: " + doc.getLastModificationDate());
+        System.out.println();
+
+        System.out.println("Waiting for 30 seconds before update...");
+
         try {
-            Database.registerValidator(Human.HUMAN_ENTITY_CODE, new HumanValidator());
-
-            Human validHuman = new Human("Ali", 25);
-            Database.add(validHuman);
-            System.out.println("✅ Human added successfully!");
-
-            Human invalidAge = new Human("Reza", -5);
-            Database.add(invalidAge);
-        } catch (InvalidEntityException e) {
-            System.out.println("❌ Validation Error: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.out.println("❌ Configuration Error: " + e.getMessage());
+            Thread.sleep(30_000);
+        } catch (InterruptedException e) {
+            System.out.println("Sleep interrupted!");
         }
+
+        doc.content = "This is the new content";
+        Database.update(doc);
+
+        System.out.println("\nDocument updated");
+        System.out.println("id: " + doc.id);
+        System.out.println("content: " + doc.content);
+        System.out.println("creation date: " + doc.getCreationDate());
+        System.out.println("last modification date: " + doc.getLastModificationDate());
     }
 }
