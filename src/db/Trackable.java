@@ -1,4 +1,4 @@
-package example;
+package db;
 
 import java.util.Date;
 
